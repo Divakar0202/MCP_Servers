@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h2>Server Dashboard</h2>
+        <div class="header-actions">
+            <a class="button ghost" href="/">Refresh</a>
+        </div>
+    </div>
+
+    {% if message %}
+    <div class="flash">{{ message }}</div>
+    {% endif %}
+
+    {% if servers %}
+    <table>
+        <thead>
+            <tr>
+                <th>Server</th>
+                <th>Status</th>
+                <th>Transport</th>
+                <th>Entrypoint</th>
+                <th>Config</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for server in servers %}
+            <tr>
+                <td>{{ server.display_name }}</td>
+                <td>
+                    <span class="status {{ 'running' if server.status == 'running' else 'stopped' }}">
+                        {{ server.status }}
+                    </span>
+                    {% if server.uptime_seconds %}
+                        <span class="uptime">{{ server.uptime_seconds }}s</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="mono">{{ server.transport }}</span>
+                    {% if server.transport == 'sse' and server.host and server.port %}
+                    <div class="mono">{{ server.host }}:{{ server.port }}</div>
+                    {% endif %}
+                </td>
+                <td class="mono">{{ server.server_script }}</td>
+                <td>
+                    <a class="link" href="/config/{{ server.server_id }}">{{ server.config_file }}</a>
+                    <details class="inline-config">
+                        <summary>Quick Configure</summary>
+                        <form method="post" action="/dashboard/config/{{ server.server_id }}" class="mini-config-form">
+                            {% for field in config_map[server.server_id] %}
+                            <div class="mini-row">
+                                <label for="{{ server.server_id }}-{{ field.key }}">{{ field.key }}</label>
+                                {% if field.sensitive %}
+                                <input
+                                    id="{{ server.server_id }}-{{ field.key }}"
+                                    name="{{ field.key }}"
+                                    type="password"
+                                    value=""
+                                    placeholder="{{ field.masked if field.masked else 'Not set' }}"
+                                    autocomplete="off"
+                                />
+                                {% else %}
+                                <input
+                                    id="{{ server.server_id }}-{{ field.key }}"
+                                    name="{{ field.key }}"
+                                    type="text"
+                                    value="{{ field.value }}"
+                                />
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            <button class="button" type="submit">Save</button>
+                        </form>
+                    </details>
+                </td>
+                <td>
+                    <div class="actions-inline">
+                        <form method="post" action="/servers/{{ server.server_id }}/start">
+                            <button class="button success" type="submit">Start</button>
+                        </form>
+                        <form method="post" action="/servers/{{ server.server_id }}/stop">
+                            <button class="button danger" type="submit">Stop</button>
+                        </form>
+                        <form method="post" action="/servers/{{ server.server_id }}/restart">
+                            <button class="button" type="submit">Restart</button>
+                        </form>
+                        <button class="button ghost log-btn"
+                                data-server="{{ server.server_id }}"
+                                onclick="showLog('{{ server.server_id }}')">Log</button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No MCP servers found. Add any folder containing <span class="mono">server.py</span> under the workspace root.</p>
+    {% endif %}
+</section>
+
+<!-- Log viewer modal -->
+<div id="log-modal" class="log-modal" style="display:none;" onclick="if(event.target===this)closeLog()">
+    <div class="log-box">
+        <div class="log-header">
+            <span id="log-title">Server Log</span>
+            <button class="button ghost" onclick="closeLog()">✕ Close</button>
+        </div>
+        <pre id="log-content" class="log-pre">Loading…</pre>
+    </div>
+</div>
+
+<script>
+function showLog(serverId) {
+    const modal = document.getElementById('log-modal');
+    const content = document.getElementById('log-content');
+    const title = document.getElementById('log-title');
+    title.textContent = serverId + ' — last 80 lines';
+    content.textContent = 'Loading…';
+    modal.style.display = 'flex';
+    fetch('/api/servers/' + serverId + '/log?lines=80')
+        .then(r => r.json())
+        .then(data => { content.textContent = data.log || '(empty)'; content.scrollTop = content.scrollHeight; })
+        .catch(e => { content.textContent = 'Error fetching log: ' + e; });
+}
+function closeLog() {
+    document.getElementById('log-modal').style.display = 'none';
+}
+</script>
+{% endblock %}

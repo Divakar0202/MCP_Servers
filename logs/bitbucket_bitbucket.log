@@ -1,0 +1,7 @@
+INFO:__main__:Initializing Bitbucket MCP Server...
+WARNING:__main__:Could not initialise Bitbucket client: Missing required configuration. Please set BITBUCKET_WORKSPACE, BITBUCKET_USERNAME, and BITBUCKET_APP_PASSWORD in config.env — server starting without credentials; configure via the control panel.
+INFO:__main__:Starting MCP server on SSE http://127.0.0.1:8611/sse
+INFO:     Started server process [712]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8611 (Press CTRL+C to quit)

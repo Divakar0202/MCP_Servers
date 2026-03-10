@@ -1,0 +1,17 @@
+# Jira MCP Server Requirements
+# Python 3.8+
+
+# MCP SDK
+mcp>=1.0.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Data validation
+pydantic>=2.0.0
+
+# Optional: Data manipulation
+pandas>=2.0.0

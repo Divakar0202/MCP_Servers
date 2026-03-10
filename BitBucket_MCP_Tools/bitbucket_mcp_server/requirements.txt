@@ -1,0 +1,17 @@
+# Bitbucket MCP Server - Requirements
+# Python 3.10+
+
+# MCP SDK
+mcp>=1.0.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Data validation (optional but recommended)
+pydantic>=2.5.0
+
+# Async HTTP (optional)
+aiohttp>=3.9.0

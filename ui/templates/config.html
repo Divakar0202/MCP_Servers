@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h2>Configuration: {{ payload.server.display_name }}</h2>
+        <a class="button ghost" href="/">Back to Dashboard</a>
+    </div>
+
+    <div class="config-meta">
+        <p><strong>Server Script:</strong> <span class="mono">{{ payload.server.server_script }}</span></p>
+        <p><strong>Config File:</strong> <span class="mono">{{ payload.config_file }}</span></p>
+    </div>
+
+    <form method="post" action="/config/{{ payload.server.server_id }}" class="config-form">
+        {% for field in payload.fields %}
+        <div class="form-row">
+            <label for="{{ field.key }}">{{ field.key }}</label>
+            {% if field.sensitive %}
+                <input
+                    id="{{ field.key }}"
+                    name="{{ field.key }}"
+                    type="password"
+                    value="{{ field.value }}"
+                    placeholder="{{ field.masked if field.masked else 'Not set' }}"
+                    autocomplete="off"
+                />
+            {% else %}
+                <input id="{{ field.key }}" name="{{ field.key }}" type="text" value="{{ field.value }}" />
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        {% if not payload.fields %}
+        <p>No configuration keys detected. Save once to create the file.</p>
+        {% endif %}
+
+        <div class="actions-inline">
+            <button class="button success" type="submit">Save Configuration</button>
+            <a class="button ghost" href="/">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

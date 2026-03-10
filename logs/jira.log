@@ -1,0 +1,7 @@
+2026-03-10 21:20:19 - jira_mcp_server - INFO - Starting Jira MCP Server...
+2026-03-10 21:20:19 - jira_mcp_server - WARNING - Could not initialise Jira client: Missing required configuration. Please set JIRA_BASE_URL, JIRA_EMAIL, and JIRA_API_TOKEN in config.env — server starting without credentials; configure via the control panel.
+2026-03-10 21:20:19 - jira_mcp_server - INFO - Starting MCP server on SSE http://127.0.0.1:8612/sse
+INFO:     Started server process [3728]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8612 (Press CTRL+C to quit)

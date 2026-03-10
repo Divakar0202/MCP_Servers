@@ -1,0 +1,9 @@
+DB server starting without valid settings: Configuration values are missing or invalid. — configure credentials via the MCP control panel and restart the server.
+Traceback (most recent call last):
+  File "D:\OpenClaw_MCP_Tools\DB_Tool_OpenClaw\postgres_mcp_server\src\server.py", line 198, in <module>
+    startup_checks()
+    ~~~~~~~~~~~~~~^^
+  File "D:\OpenClaw_MCP_Tools\DB_Tool_OpenClaw\postgres_mcp_server\src\server.py", line 192, in startup_checks
+    connection_manager.test_connection(settings.default_database)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'test_connection'

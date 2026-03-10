@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "bitbucket-readonly": {
+      "command": "python",
+      "args": [
+        "D:/BitBucket_MCP_Tools/bitbucket_mcp_server/src/server.py"
+      ],
+      "description": "Read-only access to Bitbucket repositories",
+      "capabilities": [
+        "list_repositories",
+        "get_repository_details",
+        "list_branches",
+        "list_commits",
+        "get_commit_details",
+        "list_repository_files",
+        "read_file_content",
+        "get_repository_readme",
+        "list_pull_requests",
+        "get_pull_request_details",
+        "get_pull_request_comments",
+        "list_repository_contributors",
+        "search_repository_files",
+        "get_repository_tags"
+      ],
+      "env": {},
+      "disabled": false
+    }
+  }
+}
